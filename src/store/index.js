@@ -55,7 +55,7 @@ const actions = {
 
 const getters = {
     credentials: state => state.credentials,
-    getProducts: state => state.productItems,
+    productItems: state => state.productItems,
     productItemFromName: state => productName => {
         return state.productItems.find(p => p.name === productName);
     }
