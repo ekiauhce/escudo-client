@@ -4,7 +4,6 @@ import RegisterPage from "../components/RegisterPage";
 import ProductList from "../components/ProductList";
 import PurchasesList from "../components/PurchaseList";
 import LoginPage from "../components/LoginPage";
-import store from "../store";
 
 Vue.use(Router);
 
@@ -19,29 +18,31 @@ const router = new Router({
         {
             path: "/login",
             component: LoginPage,
-            name: "LoginPage"
+            name: "LoginPage",
+            beforeEnter: (to, from, next) => {
+                const credentials = JSON.parse(localStorage.getItem("credentials"));
+                if (credentials) next("/products");
+                else next();
+            }
         },
         {
             path: "/products",
             component: ProductList,
-            name: "ProductList",
-            meta: { requiresAuth: true }
+            name: "ProductList"
         },
         {
             path: "/products/:productName/",
             component: PurchasesList,
             name: "PurchasesList",
-            meta: { requiresAuth: true },
             props: true
         }
     ]
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.matched.some(r => r.meta.requiresAuth)) {
-        if (!store.getters.credentials) next("/login");
-        else next();
-    } else next();
+    const credentials = JSON.parse(localStorage.getItem("credentials"));
+    if (!credentials && to.path !== "/login" && to.path !== "/register") next("/login");
+    else next();
 });
 
 export default router;
