@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     register() {
-      this.$store.dispatch("setCredentials", {
+      this.$store.dispatch("register", {
         username: this.username,
         password: this.password
       });

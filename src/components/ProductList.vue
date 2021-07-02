@@ -17,9 +17,6 @@ import {mapGetters} from "vuex";
 
 export default {
   name: "ProductList",
-  created() {
-    this.$store.dispatch("getProductItems");
-  },
   computed: {
     ...mapGetters(["productItems"])
   },
