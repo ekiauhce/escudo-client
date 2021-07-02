@@ -1,13 +1,14 @@
 <template>
-  <div class="container d-flex flex-column align-items-center">
-    <ul class="list-group col-md-4">
-      <ProductEntry/>
-      <li v-for="product in productItems" :key="product.id"
-          class="list-group-item list-group-item-action">
-        <ProductListItem :product="product"/>
-      <li/>
-    </ul>
-  </div>
+  <v-row justify="center">
+    <v-col sm="8" md="6" lg="4">
+      <v-list>
+          <ProductListItem v-for="product in productItems"
+                           :key="product.id" :product="product"/>
+      </v-list>
+      <v-divider></v-divider>
+      <ProductEntry class="mt-3"/>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
