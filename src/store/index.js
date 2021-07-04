@@ -27,12 +27,11 @@ const mutations = {
 
 const actions = {
     register(context, payload) {
-        axios.post("/api/register", payload,
-            { headers: {"X-Requested-With": "XMLHttpRequest"} })
-            .then();
+        return axios.post("/api/register", payload,
+            { headers: {"X-Requested-With": "XMLHttpRequest"} });
     },
     login(context, payload) {
-        axios.post("/api/login", payload,
+        return axios.post("/api/login", payload,
             { headers: {"X-Requested-With": "XMLHttpRequest"} })
             .then(() => {
                 localStorage.setItem("credentials", JSON.stringify(payload));

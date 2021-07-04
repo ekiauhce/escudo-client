@@ -1,17 +1,33 @@
 <template>
-  <div class="container d-flex justify-content-center">
-    <form @submit.prevent="login" class="col-md-4">
-      <div>
-        <label for="login-username" class="form-label">Username</label>
-        <input v-model="username" id="login-username" type="text" class="form-control"/>
-      </div>
-      <div>
-        <label for="login-password" class="form-label">Password</label>
-        <input v-model="password" id="login-password" type="password" class="form-control"/>
-      </div>
-      <button type="submit" class="btn btn-primary">Sign in</button>
-    </form>
-  </div>
+  <v-row justify="center">
+    <v-col sm="8" md="6" lg="3">
+      <v-card class="mt-10">
+        <v-card-title>Login to Escudo</v-card-title>
+        <v-card-text>
+          <v-form
+              @submit.prevent="login"
+              v-model="valid"
+              ref="form">
+            <v-text-field
+                v-model="username"
+                :error-messages="usernameErrorMessages"
+                @input="clearUsernameErrorMessages"
+                placeholder="Username"/>
+            <v-text-field
+                v-model="password"
+                :error-messages="passwordErrorMessages"
+                @input="clearPasswordErrorMessages"
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="showPassword = !showPassword"
+                :type="showPassword ? 'text' : 'password'"
+                placeholder="Password"/>
+            <v-btn class="mt-2"
+                type="submit" color="primary" block rounded>Log in</v-btn>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -19,14 +35,32 @@ export default {
   name: "LoginPage",
   data: function () {
     return {
+      valid: false,
       username: "",
-      password: ""
+      password: "",
+      showPassword: false,
+      usernameErrorMessages: [],
+      passwordErrorMessages: []
     }
   },
   methods: {
     login() {
+      if (!this.$refs.form.validate()) return;
+
       this.$store.dispatch("login",
-          { username: this.username, password: this.password});
+          { username: this.username, password: this.password})
+          .then(() => this.$router.push("/products"))
+          .catch(error => {
+            const msg = error.response.data.message;
+            if (msg.toLowerCase().includes("password")) this.passwordErrorMessages.push(msg);
+            else if (msg.toLowerCase().includes("username")) this.usernameErrorMessages.push(msg);
+          });
+    },
+    clearUsernameErrorMessages() {
+      this.usernameErrorMessages = [];
+    },
+    clearPasswordErrorMessages() {
+      this.passwordErrorMessages = [];
     }
   }
 }

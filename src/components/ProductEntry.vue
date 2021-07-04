@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.$store.dispatch("addNewProduct", {name: this.productName});
+      this.$store.dispatch("addNewProduct", {name: this.productName.trim() });
       this.productName = "";
       this.$refs.form.resetValidation();
     },
