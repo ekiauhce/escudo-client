@@ -22,6 +22,11 @@ const mutations = {
     },
     UPDATE_PRODUCT_ITEMS(state, payload) {
         state.productItems = payload;
+    },
+    DELETE_PURCHASE(state, { productId, purchaseId }) {
+        const product = state.productItems.find(p => p.id === productId);
+        const indexToRemove = product.purchases.findIndex(p => p.id === purchaseId);
+        product.purchases.splice(indexToRemove, 1);
     }
 }
 
@@ -69,7 +74,13 @@ const actions = {
                 context.commit("ADD_PURCHASE", { productId, purchase: response.data })
             });
     },
-
+    deletePurchase(context, { productId, purchaseId }) {
+        axios.delete(`/api/products/${productId}/purchases/${purchaseId}`,
+            { auth: context.getters.credentials, headers: {"X-Requested-With": "XMLHttpRequest"}})
+            .then(() => {
+                context.commit("DELETE_PURCHASE", { productId, purchaseId });
+            })
+    }
 }
 
 const getters = {
@@ -77,6 +88,11 @@ const getters = {
     productItems: state => state.productItems,
     productItemFromName: state => productName => {
         return state.productItems.find(p => p.name === productName);
+    },
+    lastPurchaseByProductId: state => productId => {
+        const product = state.productItems.find(p => p.id === productId);
+        const purchases = product.purchases;
+        return purchases[purchases.length - 1];
     }
 }
 
