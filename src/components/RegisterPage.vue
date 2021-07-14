@@ -1,36 +1,46 @@
 <template>
-  <v-row justify="center">
-    <v-col sm="8" md="6" lg="3">
-      <v-card class="mt-10">
-        <v-card-title>Create new account</v-card-title>
-        <v-card-text>
-          <v-form
-              @submit.prevent="register"
-              v-model="valid"
-              ref="form">
-            <v-text-field
-                v-model="username"
-                :rules="usernameRules"
-                @blur="resetValidation"
-                placeholder="Username"/>
-            <v-text-field
-                v-model="password"
-                :rules="passwordRules"
-                @blur="resetValidation"
-                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                @click:append="showPassword = !showPassword"
-                :type="showPassword ? 'text' : 'password'"
-                placeholder="Password"/>
-            <v-btn class="mt-2"
-                   type="submit" color="primary" block rounded>Register</v-btn>
-          </v-form>
-        </v-card-text>
-      </v-card>
-    </v-col>
-  </v-row>
+  <v-container class="mt-10">
+    <v-row justify="center">
+      <v-col sm="8" md="6" lg="4">
+        <v-alert :value="alert" type="success"
+                 transition="slide-y-transition" text>
+          <h3>Success!</h3>
+          You have created an account.
+        </v-alert>
+        <v-card>
+          <v-card-title>Create new account</v-card-title>
+          <v-card-text>
+                <v-form
+                    @submit.prevent="register"
+                    v-model="valid"
+                    ref="form">
+                  <v-text-field
+                      v-model="username"
+                      :rules="usernameRules"
+                      @blur="resetValidation"
+                      placeholder="Username"/>
+                  <v-text-field
+                      v-model="password"
+                      :rules="passwordRules"
+                      @blur="resetValidation"
+                      :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                      @click:append="showPassword = !showPassword"
+                      :type="showPassword ? 'text' : 'password'"
+                      placeholder="Password"/>
+                  <v-btn class="mt-2" type="submit" color="secondary"
+                         :loading="loading"
+                         block rounded>Register</v-btn>
+                </v-form>
+              </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
 export default {
   name: "RegisterPage",
   data: function () {
@@ -46,8 +56,12 @@ export default {
       ],
       passwordRules: [
           v => v.length >= 8 || "Password must be at least 8 characters long!"
-      ]
+      ],
+      alert: false
     }
+  },
+  computed: {
+    ...mapGetters(["loading"])
   },
   methods: {
     register() {
@@ -56,6 +70,10 @@ export default {
       this.$store.dispatch("register", {
         username: this.username,
         password: this.password })
+      .then(() => {
+        this.alert = true;
+        setTimeout(() => this.alert = false, 2000);
+      })
       .catch(() => {
         this.takenUsernames.push(this.username);
         this.$refs.form.validate();
@@ -68,6 +86,5 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style>
 </style>
