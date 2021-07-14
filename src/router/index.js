@@ -4,6 +4,7 @@ import RegisterPage from "../components/RegisterPage";
 import ProductList from "../components/ProductList";
 import PurchasesList from "../components/PurchaseList";
 import LoginPage from "../components/LoginPage";
+import NotFound from "../components/NotFound";
 
 Vue.use(Router);
 
@@ -35,6 +36,14 @@ const router = new Router({
             component: PurchasesList,
             name: "PurchasesList",
             props: true
+        },
+        {
+            path: "/",
+            redirect: "/products"
+        },
+        {
+            path: "*",
+            component: NotFound
         }
     ]
 });
