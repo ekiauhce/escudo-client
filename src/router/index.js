@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import RegisterPage from "../components/RegisterPage";
-import ProductList from "../components/ProductList";
-import PurchasesList from "../components/PurchaseList";
+import ProductList from "../components/products/ProductList";
+import PurchasesList from "../components/purchases/PurchaseList";
 import LoginPage from "../components/LoginPage";
 import NotFound from "../components/NotFound";
 
