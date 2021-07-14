@@ -1,14 +1,16 @@
 <template>
-  <v-row justify="center">
-    <v-col sm="8" md="6" lg="4">
-      <v-list>
+  <v-container>
+    <v-row justify="center">
+      <v-col sm="8" md="6" lg="4">
+        <v-list>
           <ProductListItem v-for="product in productItems"
-                           :key="product.id" :product="product"/>
-      </v-list>
-      <v-divider></v-divider>
-      <ProductEntry class="mt-3"/>
-    </v-col>
-  </v-row>
+                             :key="product.id" :product="product"/>
+        </v-list>
+        <v-divider></v-divider>
+        <ProductEntry class="mt-3"/>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

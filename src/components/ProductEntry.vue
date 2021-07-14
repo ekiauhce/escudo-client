@@ -6,7 +6,8 @@
                     @blur="clearInputIfEmpty"
                     :rules="productNameRules"
                     placeholder="Add new product" outlined dense/>
-      <v-btn :disabled="!valid" color="primary" type="submit" block rounded>
+      <v-btn :disabled="!valid" :loading="loading"
+             color="secondary" type="submit" block rounded>
         Enter
         <v-icon right>mdi-check</v-icon>
       </v-btn>
@@ -14,6 +15,8 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
 export default {
   name: "ProductEntry",
   data: function () {
@@ -25,11 +28,16 @@ export default {
       ]
     }
   },
+  computed: {
+    ...mapGetters(["loading"])
+  },
   methods: {
     onSubmit() {
-      this.$store.dispatch("addNewProduct", {name: this.productName.trim() });
-      this.productName = "";
-      this.$refs.form.resetValidation();
+      this.$store.dispatch("addNewProduct", {name: this.productName.trim() })
+      .then(() => {
+        this.productName = "";
+        this.$refs.form.resetValidation();
+      });
     },
     clearInputIfEmpty() {
       if (!this.productName.trim()) this.productName = "";

@@ -4,7 +4,7 @@
       <v-container class="pa-2">
         <v-row dense>
           <v-col class="text-no-wrap">
-            Made at:
+            At:
           </v-col>
           <v-col class="text-right text-no-wrap">
             {{ formattedMadeAt }}

@@ -1,16 +1,14 @@
 <template>
   <div id="app">
     <v-app>
-      <v-app-bar app>
+      <v-app-bar color="primary" dark app>
         <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       </v-app-bar>
       <v-navigation-drawer v-model="drawer" temporary app>
         <NavigationList />
       </v-navigation-drawer>
       <v-main>
-        <v-container fluid>
           <router-view/>
-        </v-container>
       </v-main>
     </v-app>
   </div>
