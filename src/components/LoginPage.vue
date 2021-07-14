@@ -1,36 +1,41 @@
 <template>
-  <v-row justify="center">
-    <v-col sm="8" md="6" lg="3">
-      <v-card class="mt-10">
-        <v-card-title>Login to Escudo</v-card-title>
-        <v-card-text>
-          <v-form
-              @submit.prevent="login"
-              v-model="valid"
-              ref="form">
-            <v-text-field
-                v-model="username"
-                :error-messages="usernameErrorMessages"
-                @input="clearUsernameErrorMessages"
-                placeholder="Username"/>
-            <v-text-field
-                v-model="password"
-                :error-messages="passwordErrorMessages"
-                @input="clearPasswordErrorMessages"
-                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                @click:append="showPassword = !showPassword"
-                :type="showPassword ? 'text' : 'password'"
-                placeholder="Password"/>
-            <v-btn class="mt-2"
-                type="submit" color="primary" block rounded>Log in</v-btn>
-          </v-form>
-        </v-card-text>
-      </v-card>
-    </v-col>
-  </v-row>
+  <v-container class="mt-10">
+    <v-row justify="center">
+      <v-col sm="8" md="6" lg="3">
+        <v-card>
+          <v-card-title>Login to Escudo</v-card-title>
+          <v-card-text>
+            <v-form
+                @submit.prevent="login"
+                v-model="valid"
+                ref="form">
+              <v-text-field
+                  v-model="username"
+                  :error-messages="usernameErrorMessages"
+                  @input="clearUsernameErrorMessages"
+                  placeholder="Username"/>
+              <v-text-field
+                  v-model="password"
+                  :error-messages="passwordErrorMessages"
+                  @input="clearPasswordErrorMessages"
+                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="showPassword = !showPassword"
+                  :type="showPassword ? 'text' : 'password'"
+                  placeholder="Password"/>
+              <v-btn class="mt-2" type="submit" color="secondary"
+                     :loading="loading"
+                     block rounded>Log in</v-btn>
+            </v-form>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
 export default {
   name: "LoginPage",
   data: function () {
@@ -42,6 +47,9 @@ export default {
       usernameErrorMessages: [],
       passwordErrorMessages: []
     }
+  },
+  computed: {
+    ...mapGetters(["loading"])
   },
   methods: {
     login() {

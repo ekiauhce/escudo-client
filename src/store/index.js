@@ -6,12 +6,16 @@ Vue.use(Vuex);
 
 const state = {
     credentials: null,
+    loading: false,
     productItems: []
 }
 
 const mutations = {
     SET_CREDENTIALS(state, payload) {
         state.credentials = payload;
+    },
+    SET_LOADING(state, payload) {
+        state.loading = payload;
     },
     ADD_PRODUCT(state, payload) {
         state.productItems.push(payload);
@@ -31,16 +35,24 @@ const mutations = {
 }
 
 const actions = {
-    register(context, payload) {
+    register({ commit }, payload) {
+        commit("SET_LOADING", true);
         return axios.post("/api/register", payload,
-            { headers: {"X-Requested-With": "XMLHttpRequest"} });
+            { headers: {"X-Requested-With": "XMLHttpRequest"} })
+            .finally(() => {
+                commit("SET_LOADING", false);
+            });
     },
-    login(context, payload) {
+    login({ commit }, payload) {
+        commit("SET_LOADING", true);
         return axios.post("/api/login", payload,
             { headers: {"X-Requested-With": "XMLHttpRequest"} })
             .then(() => {
                 localStorage.setItem("credentials", JSON.stringify(payload));
-                context.commit("SET_CREDENTIALS", payload);
+                commit("SET_CREDENTIALS", payload);
+            })
+            .finally(() => {
+                commit("SET_LOADING", false);
             });
     },
     logout({ commit }) {
@@ -61,17 +73,25 @@ const actions = {
             });
     },
     addNewProduct(context, payload) {
-        axios.post("/api/products", payload,
+        context.commit("SET_LOADING", true);
+        return axios.post("/api/products", payload,
             { auth: context.getters.credentials, headers: {"X-Requested-With": "XMLHttpRequest"} })
             .then(response =>  {
                 context.commit("ADD_PRODUCT", response.data);
+            })
+            .finally(() => {
+                context.commit("SET_LOADING", false);
             });
     },
     addNewPurchase(context, { productId, purchase }) {
-        axios.post(`/api/products/${productId}/purchases`,
+        context.commit("SET_LOADING", true);
+        return axios.post(`/api/products/${productId}/purchases`,
             purchase, { auth: context.getters.credentials, headers: {"X-Requested-With": "XMLHttpRequest"}})
             .then(response => {
                 context.commit("ADD_PURCHASE", { productId, purchase: response.data })
+            })
+            .finally(() => {
+                context.commit("SET_LOADING", false);
             });
     },
     deletePurchase(context, { productId, purchaseId }) {
@@ -85,6 +105,7 @@ const actions = {
 
 const getters = {
     credentials: state => state.credentials,
+    loading: state => state.loading,
     productItems: state => state.productItems,
     productItemFromName: state => productName => {
         return state.productItems.find(p => p.name === productName);
