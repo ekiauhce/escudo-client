@@ -22,6 +22,7 @@
 import PurchaseListItem from "./PurchaseListItem";
 import PurchaseEntry from "./PurchaseEntry";
 import PurchasesSummary from "./PurchasesSummary";
+import {mapGetters} from "vuex";
 
 export default {
   name: "PurchaseList",
@@ -32,8 +33,14 @@ export default {
   },
   props: ["productName"],
   computed: {
+    ...mapGetters(["isProductItemsEmpty"]),
     productItem() {
       return this.$store.getters.productItemFromName(this.productName);
+    }
+  },
+  watch: {
+    isProductItemsEmpty() {
+      if (!this.productItem) this.$router.push("/not-found");
     }
   }
 }
