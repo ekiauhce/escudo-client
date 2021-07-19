@@ -2,6 +2,11 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 
+const api = axios.create({
+    baseURL: process.env.VUE_APP_API_ENDPOINT || "http://localhost:8080",
+    headers: {"X-Requested-With": "XMLHttpRequest"}
+});
+
 Vue.use(Vuex);
 
 const state = {
@@ -37,16 +42,14 @@ const mutations = {
 const actions = {
     register({ commit }, payload) {
         commit("SET_LOADING", true);
-        return axios.post("/api/register", payload,
-            { headers: {"X-Requested-With": "XMLHttpRequest"} })
+        return api.post("register", payload)
             .finally(() => {
                 commit("SET_LOADING", false);
             });
     },
     login({ commit }, payload) {
         commit("SET_LOADING", true);
-        return axios.post("/api/login", payload,
-            { headers: {"X-Requested-With": "XMLHttpRequest"} })
+        return api.post("login", payload)
             .then(() => {
                 localStorage.setItem("credentials", JSON.stringify(payload));
                 commit("SET_CREDENTIALS", payload);
@@ -66,16 +69,14 @@ const actions = {
         context.commit("SET_CREDENTIALS", payload);
     },
     getProductItems(context) {
-        axios.get("/api/products",
-            { auth: context.getters.credentials, headers: {"X-Requested-With": "XMLHttpRequest"} })
+        api.get("products",{ auth: context.getters.credentials })
             .then(response => {
                 context.commit("UPDATE_PRODUCT_ITEMS", response.data)
             });
     },
     addNewProduct(context, payload) {
         context.commit("SET_LOADING", true);
-        return axios.post("/api/products", payload,
-            { auth: context.getters.credentials, headers: {"X-Requested-With": "XMLHttpRequest"} })
+        return api.post("products", payload,{ auth: context.getters.credentials })
             .then(response =>  {
                 context.commit("ADD_PRODUCT", response.data);
             })
@@ -85,8 +86,8 @@ const actions = {
     },
     addNewPurchase(context, { productId, purchase }) {
         context.commit("SET_LOADING", true);
-        return axios.post(`/api/products/${productId}/purchases`,
-            purchase, { auth: context.getters.credentials, headers: {"X-Requested-With": "XMLHttpRequest"}})
+        return api.post(`products/${productId}/purchases`, purchase,
+            { auth: context.getters.credentials })
             .then(response => {
                 context.commit("ADD_PURCHASE", { productId, purchase: response.data })
             })
@@ -95,8 +96,8 @@ const actions = {
             });
     },
     deletePurchase(context, { productId, purchaseId }) {
-        axios.delete(`/api/products/${productId}/purchases/${purchaseId}`,
-            { auth: context.getters.credentials, headers: {"X-Requested-With": "XMLHttpRequest"}})
+        api.delete(`products/${productId}/purchases/${purchaseId}`,
+            { auth: context.getters.credentials })
             .then(() => {
                 context.commit("DELETE_PURCHASE", { productId, purchaseId });
             })
@@ -107,6 +108,7 @@ const getters = {
     credentials: state => state.credentials,
     loading: state => state.loading,
     productItems: state => state.productItems,
+    isProductItemsEmpty: state => state.productItems.length === 0,
     productItemFromName: state => productName => {
         return state.productItems.find(p => p.name === productName);
     },
