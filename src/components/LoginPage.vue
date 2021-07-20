@@ -1,7 +1,7 @@
 <template>
   <v-container class="mt-10">
     <v-row justify="center">
-      <v-col sm="8" md="6" lg="3">
+      <v-col sm="8" md="6" lg="4">
         <v-card>
           <v-card-title>Login to Escudo</v-card-title>
           <v-card-text>
