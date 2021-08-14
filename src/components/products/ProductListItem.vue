@@ -27,7 +27,7 @@ import {mapGetters} from "vuex";
 import moment, {duration} from "moment";
 
 export default {
-  name: "ProductItem",
+  name: "ProductListItem",
   props: ["product"],
   data() {
     return {
