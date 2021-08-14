@@ -1,13 +1,13 @@
 <template>
-  <v-form class="mt-4" @submit.prevent="addNewPurchase"
-          v-model="valid"
-          ref="form">
+  <v-form @submit.prevent="addNewPurchase" 
+    v-model="valid" ref="form">
     <v-text-field v-model.number="price" :rules="newPurchaseRules"
                   @blur="resetValidation"
-                  placeholder="Enter purchase price" outlined dense/>
+                  placeholder="Enter purchase price" outlined dense
+                  background-color="white"/>
     <v-btn type="submit" color="secondary"
-           :disabled="!valid" :loading="loading"
-           rounded block>Add</v-btn>
+          :disabled="!valid" :loading="loading"
+          rounded block>Add</v-btn>
   </v-form>
 </template>
 
