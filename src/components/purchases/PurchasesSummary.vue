@@ -1,5 +1,5 @@
 <template>
-  <v-sheet v-if="productItem">
+  <v-sheet v-if="productItem" outlined rounded>
     <v-container>
       <v-row dense>
         <v-col>
