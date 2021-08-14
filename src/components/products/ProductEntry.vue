@@ -2,10 +2,10 @@
     <v-form v-model="valid"
             ref="form"
             @submit.prevent="onSubmit">
-      <v-text-field v-model="productName"
-                    @blur="clearInputIfEmpty"
-                    :rules="productNameRules"
-                    placeholder="Add new product" outlined dense/>
+      <v-text-field v-model="productName" @blur="clearInputIfEmpty"
+        :rules="productNameRules" placeholder="Add new product"
+        outlined dense background-color="white"/>
+
       <v-btn :disabled="!valid" :loading="loading"
              color="secondary" type="submit" block rounded>
         Enter
