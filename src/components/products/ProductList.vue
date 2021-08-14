@@ -1,13 +1,12 @@
 <template>
-  <v-container>
-    <v-row justify="center">
+  <v-container class="pa-0 mt-5">
+    <v-row justify="center" no-gutters>
       <v-col sm="8" md="6" lg="4">
-        <v-list>
+        <v-list v-if="productItems.length != 0" class="py-0">
           <ProductListItem v-for="product in productItems"
                              :key="product.id" :product="product"/>
         </v-list>
-        <v-divider></v-divider>
-        <ProductEntry class="mt-3"/>
+        <ProductEntry class="mt-4"/>
       </v-col>
     </v-row>
   </v-container>
