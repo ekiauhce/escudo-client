@@ -36,6 +36,13 @@ const mutations = {
         const product = state.productItems.find(p => p.id === productId);
         const indexToRemove = product.purchases.findIndex(p => p.id === purchaseId);
         product.purchases.splice(indexToRemove, 1);
+    },
+    UPDATE_PRODUCT_NAME(state, { productId, newName }) {
+        const product = state.productItems.find(p => p.id === productId);
+        product.name = newName;
+    },
+    DELETE_PRODUCT(state, { productId }) {
+        state.productItems = state.productItems.filter(p => p.id !== productId);
     }
 }
 
@@ -101,6 +108,23 @@ const actions = {
             .then(() => {
                 context.commit("DELETE_PURCHASE", { productId, purchaseId });
             })
+    },
+    changeProductName(context, { productId, newName }) {
+        // TODO: loading
+        api.patch(`products/${productId}`, { name: newName },
+            { auth: context.getters.credentials })
+            .then(() => {
+                context.commit("UPDATE_PRODUCT_NAME", { productId, newName })
+            });
+        // TODO: on error? 
+    },
+    deleteProduct(context, { productId }) {
+        api.delete(`products/${productId}`, 
+        { auth: context.getters.credentials })
+        .then(() => {
+            context.commit("DELETE_PRODUCT", { productId });
+        });
+        // TODO: on error? 
     }
 }
 
