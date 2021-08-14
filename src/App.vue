@@ -10,6 +10,16 @@
       <v-main>
           <router-view/>
       </v-main>
+      <v-footer color="transparent" class="mt-5">
+        <v-row no-gutters>
+          <v-col cols="12" class="pb-3">
+            <v-divider></v-divider>
+          </v-col>
+          <v-col class="text-center text--secondary" cols="12">
+            Made with ♥ by ekiauhce
+          </v-col>
+        </v-row>
+      </v-footer>
     </v-app>
   </div>
 </template>
