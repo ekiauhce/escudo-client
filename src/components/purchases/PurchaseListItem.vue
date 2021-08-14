@@ -1,6 +1,6 @@
 <template>
-  <v-col class="pa-1" cols="6">
-    <v-sheet outlined class="rounded-lg">
+  <v-col cols="6">
+    <v-sheet outlined class="rounded-lg ma-1">
       <v-container class="pa-2">
         <v-row dense>
           <v-col class="text-no-wrap">
@@ -21,7 +21,7 @@
         <v-row dense>
           <v-col class="text-right">
             <v-btn @click="deletePurchase" icon small>
-              <v-icon>mdi-delete</v-icon>
+              <v-icon color="error">mdi-delete</v-icon>
             </v-btn>
           </v-col>
         </v-row>
