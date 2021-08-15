@@ -1,7 +1,6 @@
 <template>
-  <v-container class="mt-10">
-    <v-row justify="center">
-      <v-col sm="8" md="6" lg="4">
+  <v-container fill-height class="justify-center">
+      <v-col sm="8" md="6" lg="4" class="pa-0">
         <v-card>
           <v-card-title>Login to Escudo</v-card-title>
           <v-card-text>
@@ -29,7 +28,6 @@
           </v-card-text>
         </v-card>
       </v-col>
-    </v-row>
   </v-container>
 </template>
 
