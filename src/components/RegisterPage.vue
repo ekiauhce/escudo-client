@@ -1,40 +1,39 @@
 <template>
-  <v-container class="mt-10">
-    <v-row justify="center">
-      <v-col sm="8" md="6" lg="4">
-        <v-alert :value="alert" type="success"
-                 transition="slide-y-transition" text>
-          <h3>Success!</h3>
-          You have created an account.
-        </v-alert>
-        <v-card>
-          <v-card-title>Create new account</v-card-title>
-          <v-card-text>
-                <v-form
-                    @submit.prevent="register"
-                    v-model="valid"
-                    ref="form">
-                  <v-text-field
-                      v-model="username"
-                      :rules="usernameRules"
-                      @blur="resetValidation"
-                      placeholder="Username"/>
-                  <v-text-field
-                      v-model="password"
-                      :rules="passwordRules"
-                      @blur="resetValidation"
-                      :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                      @click:append="showPassword = !showPassword"
-                      :type="showPassword ? 'text' : 'password'"
-                      placeholder="Password"/>
-                  <v-btn class="mt-2" type="submit" color="secondary"
-                         :loading="loading"
-                         block rounded>Register</v-btn>
-                </v-form>
-              </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+  <v-container fill-height class="justify-center">
+    <v-col sm="8" md="6" lg="4" style="position:absolute;" align-self="start">
+      <v-alert :value="alert" type="success" transition="slide-y-transition" text>
+            <h3>Success!</h3>
+            You have created an account.
+      </v-alert>
+    </v-col>
+    <v-col sm="8" md="6" lg="4" class="pa-0">
+      <v-card>
+        <v-card-title>Create new account</v-card-title>
+        <v-card-text>
+              <v-form
+                  @submit.prevent="register"
+                  v-model="valid"
+                  ref="form">
+                <v-text-field
+                    v-model="username"
+                    :rules="usernameRules"
+                    @blur="resetValidation"
+                    placeholder="Username"/>
+                <v-text-field
+                    v-model="password"
+                    :rules="passwordRules"
+                    @blur="resetValidation"
+                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    @click:append="showPassword = !showPassword"
+                    :type="showPassword ? 'text' : 'password'"
+                    placeholder="Password"/>
+                <v-btn class="mt-2" type="submit" color="secondary"
+                        :loading="loading"
+                        block rounded>Register</v-btn>
+              </v-form>
+            </v-card-text>
+      </v-card>
+    </v-col>
   </v-container>
 </template>
 
