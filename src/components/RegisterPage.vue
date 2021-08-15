@@ -1,5 +1,5 @@
 <template>
-  <v-container fill-height class="justify-center">
+  <v-container fill-height class="justify-center" fluid>
     <v-col sm="8" md="6" lg="4" style="position:absolute;" align-self="start">
       <v-alert :value="alert" type="success" transition="slide-y-transition" text>
             <h3>Success!</h3>
