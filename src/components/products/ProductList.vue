@@ -1,15 +1,22 @@
 <template>
-  <v-container class="pa-0 mt-5">
-    <v-row justify="center" no-gutters>
+  <v-container fluid class="d-flex flex-column align-center pa-0">
       <v-col sm="8" md="6" lg="4">
-        <v-list v-if="productItems.length != 0" class="py-0">
+        <v-card outlined>
+          <v-card-title>
+            Product list
+          </v-card-title>
+        </v-card>
+      </v-col>
+      <v-col sm="8" md="6" lg="4">
+        <v-list v-if="productItems.length != 0" class="py-0" outlined>
           <ProductListItem v-for="product in productItems"
                              :key="product.id" :product="product"/>
         </v-list>
-        <ProductEntry class="mt-4"/>
       </v-col>
-    </v-row>
-  </v-container>
+      <v-col sm="8" md="6" lg="4">
+        <ProductEntry/>
+      </v-col>
+      </v-container>
 </template>
 
 <script>
