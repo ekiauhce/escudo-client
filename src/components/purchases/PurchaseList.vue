@@ -1,30 +1,20 @@
 <template>
-  <v-container class="pa-0">
-    <v-row justify="center" no-gutters>
-      <v-col sm="8" md="6" lg="4">
-        <v-container class="px-1" >
-          <v-row no-gutters class="mx-1" v-if="productItem">
-            <v-col cols="12">
-              <ProductTitle :productItem="productItem"/>
-            </v-col>
-          </v-row>
-          <v-row no-gutters class="my-3 mx-1">
-            <v-col cols="12">
+    <v-container fluid class="d-flex flex-column align-center pa-0">
+      <v-col sm="8" md="6" lg="4" v-if="productItem">
+        <ProductTitle :productItem="productItem"/>
+      </v-col>
+      <v-col sm="8" md="6" lg="4" v-if="productItem">
             <PurchasesSummary :productItem="productItem"/>
-            </v-col>
-          </v-row>
-          <v-row v-if="productItem" no-gutters>
+      </v-col>
+      <v-col sm="8" md="6" lg="4" v-if="productItem">
+        <v-row dense>
             <PurchaseListItem v-for="purchaseItem in productItem.purchases" :key="purchaseItem.id"
               :purchaseItem="purchaseItem" :productItemId="productItem.id"/>
-          </v-row>
-          <v-row no-gutters class="my-3 mx-1">
-            <v-col>
-            <PurchaseEntry :productItem="productItem"/>
-            </v-col>
-          </v-row>
-        </v-container>
+        </v-row>
       </v-col>
-    </v-row>
+      <v-col sm="8" md="6" lg="4" v-if="productItem">
+      <PurchaseEntry :productItem="productItem"/>
+      </v-col>
   </v-container>
 </template>
 

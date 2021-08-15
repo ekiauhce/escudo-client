@@ -2,18 +2,16 @@
     <v-list-item :to="'/products/' + product.name" two-line>
       <v-list-item-content>
         <v-list-item-title>
-          <v-container class="pa-0">
-            <v-row dense>
-              <v-col>
-                {{ product.name }}
-              </v-col>
-              <v-col class="text-right">
-                <strong v-if="lastPurchase">{{ lastPurchaseCostPerDay }}</strong>
-                <strong v-else>0</strong>
-                <small> ₽/day</small>
-              </v-col>
-            </v-row>
-          </v-container>
+          <v-row no-gutters>
+            <v-col>
+              {{ product.name }}
+            </v-col>
+            <v-col class="text-right">
+              <strong v-if="lastPurchase">{{ lastPurchaseCostPerDay }}</strong>
+              <strong v-else>0</strong>
+              <small> ₽/day</small>
+            </v-col>
+          </v-row>
         </v-list-item-title>
         <v-list-item-subtitle v-if="lastPurchase">
           {{ lastPurchaseMadeAtMomentFormatted }}

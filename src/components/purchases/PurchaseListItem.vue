@@ -1,6 +1,6 @@
 <template>
   <v-col cols="6">
-    <v-sheet outlined class="rounded-lg ma-1">
+    <v-sheet outlined class="rounded-lg">
       <v-container class="pa-2">
         <v-row dense>
           <v-col class="text-no-wrap">
