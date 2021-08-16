@@ -1,24 +1,24 @@
 <template>
-  <v-col cols="6">
+  <v-container class="pa-0">
     <v-sheet outlined class="rounded-lg">
-      <v-container class="pa-2">
-        <v-row dense>
-          <v-col class="text-no-wrap">
+      <v-container>
+        <v-row no-gutters>
+          <v-col cols="auto" class="flex-shrink-1">
             At:
           </v-col>
-          <v-col class="text-right text-no-wrap">
+          <v-col class="text-right">
             {{ formattedMadeAt }}
           </v-col>
         </v-row>
-        <v-row dense>
-          <v-col>
+        <v-row no-gutters class="my-1">
+          <v-col cols="auto" class="flex-shrink-1">
             Price:
           </v-col>
           <v-col class="text-right">
             <strong>{{ purchaseItem.price }}</strong> <small>₽</small>
           </v-col>
         </v-row>
-        <v-row dense>
+        <v-row no-gutters>
           <v-col class="text-right">
             <v-btn @click="deletePurchase" icon small>
               <v-icon color="error">mdi-delete</v-icon>
@@ -27,7 +27,7 @@
         </v-row>
       </v-container>
     </v-sheet>
-  </v-col>
+  </v-container>
 </template>
 
 <script>
