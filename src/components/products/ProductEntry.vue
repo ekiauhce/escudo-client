@@ -23,8 +23,10 @@ export default {
     return {
       valid: false,
       productName: "",
+      takenProductNames: [],
       productNameRules: [
-          v => !!v.trim() || "Product name can't be empty!"
+          v => !!v.trim() || "Product name can't be empty!",
+          v => !this.takenProductNames.includes(v) || "Product with this name already exists!"
       ]
     }
   },
@@ -37,6 +39,10 @@ export default {
       .then(() => {
         this.productName = "";
         this.$refs.form.resetValidation();
+      })
+      .catch(() => {
+        this.takenProductNames.push(this.productName);
+        this.$refs.form.validate();
       });
     },
     clearInputIfEmpty() {
