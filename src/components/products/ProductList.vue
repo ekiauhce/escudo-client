@@ -9,10 +9,12 @@
             </v-card>
           </v-col>
           <v-col cols="12">
-            <v-list v-if="productItems.length != 0" class="py-0" outlined>
+            <v-list v-if="productItems != null && productItems.length > 0" class="py-0" outlined>
               <ProductListItem v-for="product in productItems"
-                                :key="product.id" :product="product"/>
+                                :key="product.name" :product="product"/>
             </v-list>
+            <v-skeleton-loader v-else-if="productItems == null" type="list-item-two-line@4">
+            </v-skeleton-loader>
           </v-col>
           <v-col cols="12">
             <ProductEntry/>
@@ -30,8 +32,13 @@ import {mapGetters} from "vuex";
 
 export default {
   name: "ProductList",
+  created() {
+    if (this.productItems == null) {
+      this.$store.dispatch("getProductItems");
+    }
+  },
   computed: {
-    ...mapGetters(["productItems"])
+    ...mapGetters(["credentials", "productItems"])
   },
   components: {
     ProductListItem,
