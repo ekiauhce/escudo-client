@@ -35,16 +35,19 @@ import moment from "moment";
 
 export default {
   name: "PurchaseListItem",
-  props: ["purchaseItem", "productItemId"],
+  props: ["purchaseItem", "productItemName"],
   methods: {
     deletePurchase() {
       this.$store.dispatch("deletePurchase",
-          { productId: this.productItemId, purchaseId: this.purchaseItem.id });
+          {
+            productName: this.productItemName,
+            purchaseId: this.purchaseItem.id
+          });
     },
   },
   computed: {
     formattedMadeAt() {
-      return moment(this.purchaseItem.madeAt).format("MMM D, HH:mm");
+    return moment(this.purchaseItem.madeAt).format("MMM D, HH:mm");
     }
   }
 }

@@ -7,7 +7,7 @@
           <v-form @submit.prevent="changeProductName()" v-model="valid" ref="form">
             <v-text-field dense hide-details="auto" outlined autofocus
                   @blur="isEditing = !isEditing"
-                  v-model="newName" :placeholder="productItem.name">
+                  v-model="newName" :placeholder="productItemName">
               <template v-slot:append-outer>
                 <v-btn icon small type="submit">
                   <v-icon tile> mdi-checkbox-marked</v-icon>
@@ -17,7 +17,7 @@
           </v-form>
         </v-col>
         <v-col v-else @click="isEditing = !isEditing" class="py-1 flex-grow-1" cols="auto">
-          {{ productItem.name }}
+          {{ productItemName }}
         </v-col>
         <v-col v-if="!isEditing" class="flex-shrink-1" cols="auto">
           <v-btn icon @click="deleteProduct()">
@@ -33,7 +33,7 @@
 <script>
 export default {
   name: "ProductTitle",
-  props: ["productItem"],
+  props: ["productItemName"],
   data() {
     return {
       valid: false,
@@ -44,7 +44,7 @@ export default {
   methods: {
     changeProductName() {
       this.$store.dispatch("changeProductName", {
-        productId: this.productItem.id,
+        productName: this.productItemName,
         newName: this.newName
       });
       this.isEditing = false;
@@ -53,7 +53,7 @@ export default {
     },
     deleteProduct() {
       this.$store.dispatch("deleteProduct", {
-        productId: this.productItem.id
+        productName: this.productItemName
       });
       this.$router.replace("/products");
     }
