@@ -25,8 +25,6 @@
 </template>
 
 <script>
-
-import { mapGetters } from "vuex";
 import NavigationList from "./components/NavigationList";
 
 export default {
@@ -39,16 +37,10 @@ export default {
       drawer: false
     }
   },
-  computed: {
-    ...mapGetters(["credentials"])
-  },
   created() {
     const credentials = JSON.parse(localStorage.getItem("credentials"));
-    if (credentials) this.$store.dispatch("setCredentials", credentials);
-  },
-  watch: {
-    credentials() {
-      if (this.credentials) this.$store.dispatch("getProductItems");
+    if (credentials) {
+      this.$store.dispatch("setCredentials", credentials); 
     }
   },
   methods: {
