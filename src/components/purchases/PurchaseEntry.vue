@@ -22,7 +22,8 @@ export default {
       price: "",
       valid: false,
       newPurchaseRules: [
-        v => /^\d+$/.test(v) || /^\d+\.\d*$/.test(v) || "Purchase price must be a number!"
+        v => /^[1-9]{1}\d*$/.test(v) || /^[1-9]{1}\d*\.\d*$/.test(v) ||
+          "Purchase price must be a positive number!"
       ]
     };
   },
@@ -31,12 +32,15 @@ export default {
   },
   methods: {
     addNewPurchase() {
-      this.$store.dispatch("addNewPurchase",
-          { productId: this.productItem.id, purchase: { price: this.price }})
-          .then(() => {
-            this.price = "";
-            this.resetValidation();
-          });
+      this.$store.dispatch("addNewPurchase", 
+      { 
+        productName: this.productItem.name,
+        purchase: { price: this.price }
+      }
+      ).then(() => {
+        this.price = "";
+        this.resetValidation();
+      });
     },
     resetValidation() {
       this.$refs.form.resetValidation();
