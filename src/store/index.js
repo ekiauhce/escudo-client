@@ -12,7 +12,7 @@ Vue.use(Vuex);
 const state = {
     credentials: null,
     loading: false,
-    productItems: []
+    productItems: null
 }
 
 const mutations = {
@@ -25,24 +25,32 @@ const mutations = {
     ADD_PRODUCT(state, payload) {
         state.productItems.push(payload);
     },
-    ADD_PURCHASE(state, { productId, purchase }) {
-        const product = state.productItems.find(p => p.id === productId);
+    ADD_PURCHASE(state, { productName, purchase }) {
+        const product = state.productItems.find(p => p.name === productName);
         product.purchases.push(purchase);
     },
     UPDATE_PRODUCT_ITEMS(state, payload) {
         state.productItems = payload;
     },
-    DELETE_PURCHASE(state, { productId, purchaseId }) {
-        const product = state.productItems.find(p => p.id === productId);
+    SET_PURCHASES(state, { productName, purchases }) {
+        const product = state.productItems.find(p => p.name == productName);
+        product.purchases = purchases;
+    },
+    DELETE_PURCHASE(state, { productName, purchaseId }) {
+        const product = state.productItems.find(p => p.name === productName);
         const indexToRemove = product.purchases.findIndex(p => p.id === purchaseId);
         product.purchases.splice(indexToRemove, 1);
     },
-    UPDATE_PRODUCT_NAME(state, { productId, newName }) {
-        const product = state.productItems.find(p => p.id === productId);
+    UPDATE_PRODUCT_NAME(state, { productName, newName }) {
+        const product = state.productItems.find(p => p.name === productName);
         product.name = newName;
     },
-    DELETE_PRODUCT(state, { productId }) {
-        state.productItems = state.productItems.filter(p => p.id !== productId);
+    DELETE_PRODUCT(state, { productName }) {
+        state.productItems = state.productItems.filter(p => p.name !== productName);
+    },
+    SET_PRODUCT_SUMMARY(state, { productName, summary }) {
+        const product = state.productItems.find(p => p.name === productName);
+        product.summary = summary;
     }
 }
 
@@ -76,14 +84,14 @@ const actions = {
         context.commit("SET_CREDENTIALS", payload);
     },
     getProductItems(context) {
-        api.get("products",{ auth: context.getters.credentials })
+        return api.get("products", { auth: context.getters.credentials })
             .then(response => {
                 context.commit("UPDATE_PRODUCT_ITEMS", response.data)
             });
     },
     addNewProduct(context, payload) {
         context.commit("SET_LOADING", true);
-        return api.post("products", payload,{ auth: context.getters.credentials })
+        return api.post("products", payload, { auth: context.getters.credentials })
             .then(response =>  {
                 context.commit("ADD_PRODUCT", response.data);
             })
@@ -91,38 +99,54 @@ const actions = {
                 context.commit("SET_LOADING", false);
             });
     },
-    addNewPurchase(context, { productId, purchase }) {
+    getPurchases(context, { productName }) {
+        return api.get(`products/${productName}/purchases`, { auth: context.getters.credentials })
+            .then(response => {
+                const purchases = response.data;
+                context.commit("SET_PURCHASES", { productName, purchases })
+            });
+    },
+    addNewPurchase(context, { productName, purchase }) {
         context.commit("SET_LOADING", true);
-        return api.post(`products/${productId}/purchases`, purchase,
+
+        return api.post(`products/${productName}/purchases`, purchase,
             { auth: context.getters.credentials })
             .then(response => {
-                context.commit("ADD_PURCHASE", { productId, purchase: response.data })
+                const purchase = response.data.purchase;
+                const summary = response.data.summary;
+
+                context.commit("ADD_PURCHASE", { productName, purchase });
+                context.commit("SET_PRODUCT_SUMMARY", { productName, summary });
             })
             .finally(() => {
                 context.commit("SET_LOADING", false);
             });
     },
-    deletePurchase(context, { productId, purchaseId }) {
-        api.delete(`products/${productId}/purchases/${purchaseId}`,
+    deletePurchase(context, { productName, purchaseId }) {
+        api.delete(`products/${productName}/purchases/${purchaseId}`,
             { auth: context.getters.credentials })
-            .then(() => {
-                context.commit("DELETE_PURCHASE", { productId, purchaseId });
+            .then(response => {
+                context.commit("DELETE_PURCHASE", { productName, purchaseId });
+
+                const summary = response.data.summary;
+
+                context.commit("SET_PRODUCT_SUMMARY", { productName, summary });
             })
     },
-    changeProductName(context, { productId, newName }) {
+    changeProductName(context, { productName, newName }) {
         // TODO: loading
-        api.patch(`products/${productId}`, { name: newName },
+        api.patch(`products/${productName}`, { name: newName },
             { auth: context.getters.credentials })
             .then(() => {
-                context.commit("UPDATE_PRODUCT_NAME", { productId, newName })
+                context.commit("UPDATE_PRODUCT_NAME", { productName, newName })
             });
         // TODO: on error? 
     },
-    deleteProduct(context, { productId }) {
-        api.delete(`products/${productId}`, 
+    deleteProduct(context, { productName }) {
+        api.delete(`products/${productName}`, 
         { auth: context.getters.credentials })
         .then(() => {
-            context.commit("DELETE_PRODUCT", { productId });
+            context.commit("DELETE_PRODUCT", { productName });
         });
         // TODO: on error? 
     }
@@ -134,12 +158,10 @@ const getters = {
     productItems: state => state.productItems,
     isProductItemsEmpty: state => state.productItems.length === 0,
     productItemFromName: state => productName => {
+        if (state.productItems == null) {
+            return null;
+        }
         return state.productItems.find(p => p.name === productName);
-    },
-    lastPurchaseByProductId: state => productId => {
-        const product = state.productItems.find(p => p.id === productId);
-        const purchases = product.purchases;
-        return purchases[purchases.length - 1];
     }
 }
 
