@@ -4,13 +4,16 @@
       <v-col sm="8" md="6" lg="4">
         <v-row>
           <v-col cols="12">
-            <ProductTitle :productItemName="productName" v-if="productItem"/>
-            <v-skeleton-loader v-else type="card-title"></v-skeleton-loader>
+            <div v-if="productItem">
+              <ProductTitle :productItemName="productName"/>
+            </div>
+            <div v-else>
+              <v-skeleton-loader type="card-heading"></v-skeleton-loader>
+            </div>
           </v-col>
-          
           <v-col cols="12">
             <div v-if="productItem">
-              <ProductSummary :productItem="productItem"/>
+              <PurchasesSummary :productItem="productItem"/>
             </div>
             <div v-else>
               <v-skeleton-loader type="list-item-two-line"></v-skeleton-loader>
@@ -38,7 +41,7 @@
 <script>
 
 import PurchaseEntry from "../purchases/PurchaseEntry";
-import ProductSummary from "./ProductSummary";
+import PurchasesSummary from "../purchases/PurchasesSummary";
 import ProductTitle from "./ProductTitle";
 import {mapGetters} from "vuex";
 import PurchaseList from '../purchases/PurchaseList';
@@ -46,7 +49,7 @@ import PurchaseList from '../purchases/PurchaseList';
 export default {
   name: "ProductDetails",
   components: {
-    ProductSummary,
+    PurchasesSummary,
     PurchaseEntry,
     PurchaseList,
     ProductTitle
