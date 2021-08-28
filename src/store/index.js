@@ -48,9 +48,13 @@ const mutations = {
     DELETE_PRODUCT(state, { productName }) {
         state.productItems = state.productItems.filter(p => p.name !== productName);
     },
-    SET_PRODUCT_SUMMARY(state, { productName, summary }) {
+    SET_PURCHASES_SUMMARY(state, { productName, summary }) {
         const product = state.productItems.find(p => p.name === productName);
         product.summary = summary;
+    },
+    SET_LATEST_PURCHASE_MADE_AT(state, { productName, timestamp }) {
+        const product = state.productItems.find(p => p.name == productName);
+        product.latestPurchaseMadeAt = timestamp;
     }
 }
 
@@ -114,9 +118,11 @@ const actions = {
             .then(response => {
                 const purchase = response.data.purchase;
                 const summary = response.data.summary;
+                const timestamp = response.data.latestPurchaseMadeAt;
 
                 context.commit("ADD_PURCHASE", { productName, purchase });
-                context.commit("SET_PRODUCT_SUMMARY", { productName, summary });
+                context.commit("SET_PURCHASES_SUMMARY", { productName, summary });
+                context.commit("SET_LATEST_PURCHASE_MADE_AT", { productName, timestamp });
             })
             .finally(() => {
                 context.commit("SET_LOADING", false);
@@ -129,8 +135,10 @@ const actions = {
                 context.commit("DELETE_PURCHASE", { productName, purchaseId });
 
                 const summary = response.data.summary;
+                const timestamp = response.data.latestPurchaseMadeAt;
 
-                context.commit("SET_PRODUCT_SUMMARY", { productName, summary });
+                context.commit("SET_PURCHASES_SUMMARY", { productName, summary });
+                context.commit("SET_LATEST_PURCHASE_MADE_AT", { productName, timestamp });
             })
     },
     changeProductName(context, { productName, newName }) {
@@ -149,6 +157,15 @@ const actions = {
             context.commit("DELETE_PRODUCT", { productName });
         });
         // TODO: on error? 
+    },
+    getPurchasesSummary(context, { productName }) {
+        api.get(`products/${productName}/summary`,
+        { auth: context.getters.credentials })
+        .then(response => {
+            const summary = response.data;
+
+            context.commit("SET_PURCHASES_SUMMARY", { productName, summary });
+        });
     }
 }
 
