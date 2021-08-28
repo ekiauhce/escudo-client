@@ -6,27 +6,31 @@
             <v-col>
               {{ product.name }}
             </v-col>
-            <v-col class="text-right">
-              <!-- TODO: add some info about product on the right of list item -->
-              <!-- <strong v-if="lastPurchase">{{ lastPurchaseCostPerDay }}</strong>
-              <strong v-else>0</strong>
-              <small> ₽/day</small> -->
-            </v-col>
           </v-row>
         </v-list-item-title>
-        <!-- <v-list-item-subtitle>
-          sdsds
-        </v-list-item-subtitle> -->
+        <v-list-item-subtitle v-if="product.latestPurchaseMadeAt">
+          Latest purchase: {{ latestPurchaseMadeAtAgo() }} 
+        </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   name: "ProductListItem",
   props: ["product"],
   data() {
     return {
+      now: moment()
+    }
+  },
+  created() {
+    setInterval(() => this.now = moment(), 1000);
+  },
+  methods: {
+    latestPurchaseMadeAtAgo() {
+      return moment(this.product.latestPurchaseMadeAt).from(this.now);
     }
   }
 }
